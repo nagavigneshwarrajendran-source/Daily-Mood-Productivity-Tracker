@@ -1,0 +1,22 @@
+name: Build iOS
+on: [push]
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install Toolchain
+        run: |
+          pip install kivy-ios requests certifi pillow
+          toolchain build kivy requests certifi pillow
+      - name: Create Xcode Project
+        run: toolchain create VigneMap .
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Xcode-Project
+          path: VigneMap-ios/
